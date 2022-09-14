@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=UTF-8 />
+</head>
+<body>
+<script src="three.min.js"></script>
+<script src="GLTFLoader.js"></script>
+<script src="OrbitControls.js"></script>
+<script>
+    let scene, camera, renderer;
+    function init() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x404040);
+        camera = new THREE.PerspectiveCamera(20,window.innerWidth/window.innerHeight,1,5000);
+        camera.rotation.y = 45/180*Math.PI;
+        camera.position.x = -20;
+        camera.position.y = 100;
+        camera.position.z = 0;
+
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+
+        controls = new THREE.OrbitControls(camera,renderer.domElement);
+        controls.update();
+        hlight = new THREE.AmbientLight (0x404040,30);
+        scene.add(hlight);
+        directionalLight = new THREE.DirectionalLight(0x708090,10);
+        directionalLight.position.set(100,100,100);
+        directionalLight.castShadow = true;
+
+        scene.add(directionalLight);
+
+        light = new THREE.PointLight(0x708090,10);
+        light.position.set(300,100,500);
+        scene.add(light);
+
+        light2 = new THREE.PointLight(0x708090,10);
+        light2.position.set(500, 500, 500);
+        scene.add(light2);
+
+        
+        light3 = new THREE.PointLight(0x708090,10);
+        light3.position.set(-300,-100,-500);
+        scene.add(light3);
+
+        light4 = new THREE.PointLight(0x708090,10);
+        light4.position.set(-500, -500, -500);
+        scene.add(light4);
+
+
+
+        let loader = new THREE.GLTFLoader();
+        loader.load('mpu6050.gltf', function(gltf){
+            car = gltf.scene.children[0];
+            car.scale.set(10,10,10);
+            scene.add(gltf.scene);
+            animate();
+        });
+    }
+
+    function animate() {
+        renderer.render(scene,camera);
+        requestAnimationFrame(animate);
+    }
+    init();
+</script>
+</body>
+</html>
+
+<style>
+
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  background-color: black;
+  overflow: hidden;
+}
+
+</style>
